@@ -64,4 +64,5 @@ BOARD_USES_STML0XX_SENSOR_HUB := true
 
 # SHIMS
 TARGET_LD_SHIM_LIBS := \
-    /system/lib/libjustshoot.so|libjustshoot_shim.so
+    /system/lib/libjustshoot.so|libjustshoot_shim.so \
+    /system/vendor/lib/libmmcamera_wavelet_lib.so|libshim_atomic.so
