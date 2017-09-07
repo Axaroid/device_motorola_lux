@@ -31,6 +31,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     libjustshoot_shim \
+    libshims_sensorlistener \
     libshim_atomic
 
 # Media
