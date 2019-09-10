@@ -71,6 +71,10 @@ $(call inherit-product, device/motorola/lux/system_prop.mk)
 PRODUCT_PACKAGES += \
     init.target.rc
 
+# RIL
+PRODUCT_PACKAGES += \
+    libshim_binder
+
 # Sensors
 PRODUCT_PACKAGES += \
     akmd09912 \
