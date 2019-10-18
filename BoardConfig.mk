@@ -51,9 +51,6 @@ WITH_DEXPREOPT_PIC := true
 endif
 endif
 
-# Properties
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
-
 # SELinux
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
