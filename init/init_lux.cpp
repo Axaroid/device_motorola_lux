@@ -42,23 +42,6 @@ using android::init::property_set;
 static void dual_sim(void);
 static void single_sim(void);
 
-void property_override(char const prop[], char const value[])
-{
-    prop_info *pi;
-
-    pi = (prop_info*) __system_property_find(prop);
-    if (pi)
-        __system_property_update(pi, value, strlen(value));
-    else
-        __system_property_add(prop, strlen(prop), value, strlen(value));
-}
-
-void property_override_dual(char const system_prop[], char const vendor_prop[], char const value[])
-{
-    property_override(system_prop, value);
-    property_override(vendor_prop, value);
-}
-
 void vendor_load_properties()
 {
     bool force_msim = false;
@@ -68,17 +51,11 @@ void vendor_load_properties()
     std::string carrier = GetProperty("ro.boot.carrier","");
     std::string numsims = GetProperty("ro.boot.num-sims","");
 
-    property_override_dual("ro.product.model", "ro.vendor.product.model",sku.c_str());
-
     if (atoi(numsims.c_str()) >= 2)
         force_msim = true;
 
     if (!force_msim && (carrier == "retgb" || carrier == "reteu" || carrier == "retde" || carrier == "vfau")) {
-        // These are single SIM XT1562 devices
         single_sim();
-        property_override_dual("ro.product.device","ro.vendor.product.device", "lux");
-        property_override_dual("ro.build.product","ro.vendor.build.product", "lux");
-        property_set("ro.mot.build.customerid", "reteu");
         property_set("ro.gsm.data_retry_config", "default_randomization=2000,max_retries=infinite,1000,1000,80000,125000,485000,905000");
         property_set("persist.radio.mot_ecc_custid", "emea");
         property_set("persist.radio.mot_ecc_enabled", "1");
@@ -86,9 +63,6 @@ void vendor_load_properties()
     }
     else if (sku == "XT1562" || radio == "0x4") {
         dual_sim();
-        property_override_dual("ro.product.device","ro.vendor.product.device", "lux_uds");
-        property_override_dual("ro.build.product","ro.vendor.build.product", "lux_uds");
-        property_set("ro.mot.build.customerid", "retasiaall");
         property_set("ro.gsm.data_retry_config", "default_randomization=2000,max_retries=infinite,1000,1000,80000,125000,485000,905000");
         property_set("persist.radio.mot_ecc_custid", "emea");
         property_set("persist.radio.mot_ecc_enabled", "1");
@@ -96,20 +70,13 @@ void vendor_load_properties()
     }
     else if (force_msim || carrier == "retbr" || carrier == "retla" || carrier == "tefbr" ||
              carrier == "timbr" || carrier == "retmx") {
-        // These are dual SIM XT1563 devices
         dual_sim();
-        property_override_dual("ro.product.device","ro.vendor.product.device", "lux_uds");
-        property_override_dual("ro.build.product","ro.vendor.build.product", "lux_uds");
-        property_set("ro.mot.build.customerid", "retla");
         property_set("ro.gsm.data_retry_config", "default_randomization=2000,max_retries=infinite,1000,1000,80000,125000,485000,905000");
         property_set("persist.radio.mot_ecc_enabled", "1");
         property_set("persist.radio.process_sups_ind", "1");
     }
     else if (sku == "XT1563" || radio == "0x8") {
         single_sim();
-        property_override_dual("ro.product.device","ro.vendor.product.device", "lux");
-        property_override_dual("ro.build.product","ro.vendor.build.product", "lux");
-        property_set("ro.mot.build.customerid", "retca");
         property_set("ro.gsm.data_retry_config", "");
         property_set("persist.radio.mot_ecc_enabled", "");
         property_set("persist.radio.process_sups_ind", "1");
